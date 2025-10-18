@@ -1,0 +1,63 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  broker-0:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: broker-0
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 0
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker-0:9070,CONNECTIONS_FROM_HOST://localhost:9080
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9080:9080"
+
+  broker-1:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: broker-1
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker-1:9071,CONNECTIONS_FROM_HOST://localhost:9081
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9081:9081"
+  
+  broker-2:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: broker-2
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker-2:9072,CONNECTIONS_FROM_HOST://localhost:9082
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9082:9082"
+
+  ui:
+    image: provectuslabs/kafka-ui:v0.7.0
+    container_name: kafka-ui
+    depends_on:
+      - zookeeper
+    ports:
+      - "8081:8080"
+    environment:
+      KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: broker-0:9070,broker-1:9071,broker-2:9072
+      KAFKA_CLUSTERS_0_NAME: CHECKPOINT_CLUSTER
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2182
