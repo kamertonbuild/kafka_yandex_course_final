@@ -7,6 +7,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
+    networks:
+      - kafka-network
 
   broker-0:
     image: confluentinc/cp-kafka:7.0.1
@@ -21,6 +23,8 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:
       - "9080:9080"
+    networks:
+      - kafka-network
 
   broker-1:
     image: confluentinc/cp-kafka:7.0.1
@@ -35,6 +39,8 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:
       - "9081:9081"
+    networks:
+      - kafka-network
   
   broker-2:
     image: confluentinc/cp-kafka:7.0.1
@@ -49,7 +55,8 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:
       - "9082:9082"
-
+    networks:
+      - kafka-network
   ui:
     image: provectuslabs/kafka-ui:v0.7.0
     container_name: kafka-ui
@@ -57,7 +64,12 @@ services:
       - zookeeper
     ports:
       - "8081:8080"
+    networks:
+      - kafka-network
     environment:
       KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: broker-0:9070,broker-1:9071,broker-2:9072
       KAFKA_CLUSTERS_0_NAME: CHECKPOINT_CLUSTER
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2182
+
+networks:
+  kafka-network:

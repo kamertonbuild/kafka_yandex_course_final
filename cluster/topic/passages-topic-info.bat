@@ -1,0 +1,1 @@
+docker exec -it broker-0 /bin/kafka-topics --describe --topic passages --bootstrap-server broker-0:9070

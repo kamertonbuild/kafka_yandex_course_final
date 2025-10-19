@@ -1,0 +1,17 @@
+version: '3'
+services:
+  kc-unit-1:
+    image: kc-unit-1:1.0.0
+    environment:
+      KC_UNIT1_BOOTSTRAP_URL: broker-0:9070
+      KC_UNIT1_TOPIC_NAME: passages
+    deploy:
+      mode: replicated
+      replicas: 2
+    networks:
+      - kafka-network
+    depends_on:
+      - broker-0
+      - broker-1
+      - broker-2
+      - zookeeper

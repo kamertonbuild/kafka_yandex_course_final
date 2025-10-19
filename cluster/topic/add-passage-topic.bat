@@ -1,0 +1,1 @@
+docker exec -it broker-0 /bin/kafka-topics --create --topic passages --bootstrap-server broker-0:9070 --partitions 3 --replication-factor 2
