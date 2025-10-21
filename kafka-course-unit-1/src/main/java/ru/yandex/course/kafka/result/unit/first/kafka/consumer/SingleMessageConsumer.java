@@ -34,12 +34,19 @@ public class SingleMessageConsumer {
     public SingleMessageConsumer(String topicName, String bootstrapUrl) {
         Map<String, Object> settings =
             ImmutableMap.of(
+                // Адрес kafka-брокера.
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapUrl,
+                // Класс десериализатора для ключа.
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName(),
+                // Класс десериализатора для сообщения.
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaJsonDeserializer.class.getName(),
+                // Максимальное кол-во записей, возвращаемых за один вызов poll().
                 ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1,
+                // Включена автоматическая фиксация смещения.
                 ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true,
+                // Период автоматической фиксаций смещения.
                 ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 100,
+                // Идентификатор группы consumer'ов.
                 ConsumerConfig.GROUP_ID_CONFIG, getClass().getSimpleName()
             );
 

@@ -38,13 +38,21 @@ public class BatchMessageConsumer {
     public BatchMessageConsumer(String topicName, String bootstrapUrl) {
         Map<String, Object> settings =
             ImmutableMap.of(
+                // Адрес kafka-брокера.
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapUrl,
+                // Класс десериализатора для ключа.
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName(),
+                // Класс десериализатора для сообщения.
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaJsonDeserializer.class.getName(),
+                // Идентификатор группы consumer'ов.
                 ConsumerConfig.GROUP_ID_CONFIG, this.getClass().getSimpleName(),
+                // Отключена автоматическая фиксация смещения.
                 ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false,
+                // Минимальный размер данных, возвращаемых за один вызов poll().
                 ConsumerConfig.FETCH_MIN_BYTES_CONFIG, FETCH_MIN_BYTES,
+                // Максимальное время ожидания для получения данных.
                 ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, FETCH_MAX_WAIT_MS,
+                // Максимальная задержка между вызовами poll().
                 ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, MAX_POLL_INTERVAL_MS);
 
         try {

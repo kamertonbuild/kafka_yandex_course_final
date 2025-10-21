@@ -36,13 +36,19 @@ public class MessageProducer {
     public MessageProducer(String topicName, String bootstrapUrl) {
         Map<String, Object> settings =
             ImmutableMap.of(
+                // Адрес kafka-брокера.
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapUrl,
 
+                // Режим At Least Once.
+                // Ожидание синхронизации коли-ва реплик, заданных в параметре MIN_IN_SYNC_REPLICAS_CONFIG.
                 ProducerConfig.ACKS_CONFIG, ACKS_ALL,
+                // Количество повторных попыток выполнить запрос, который завершился неудачей.
                 ProducerConfig.RETRIES_CONFIG, RETRIES_NUMBER,
+                // Минимальное количество синхронизированных реплик.
                 TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, MIN_IN_SYNC_REPLICAS_NUMBER,
-
+                // Класс сериализатора для ключа.
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class.getName(),
+                // Класс сериализатора для сообщения.
                 ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaJsonSerializer.class.getName()
             );
 
