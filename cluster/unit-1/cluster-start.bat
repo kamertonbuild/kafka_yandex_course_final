@@ -11,6 +11,7 @@ ECHO ======================================================================
 ECHO 2. Building the application
 ECHO ======================================================================
 cd ..
+cd ..
 call mvn clean
 call mvn package
 ECHO ======================================================================
@@ -19,8 +20,8 @@ ECHO.
 ECHO ======================================================================
 ECHO 3. Creating a Docker image
 ECHO ======================================================================
-cd cluster
-copy /y ..\kafka-course-unit-1\target\kc-*.jar *.jar
+cd cluster\unit-1
+copy /y ..\..\kafka-course-unit-1\target\kc-*.jar *.jar
 docker build . -t kc-unit-1:1.0.0
 ECHO ======================================================================
 ECHO.
