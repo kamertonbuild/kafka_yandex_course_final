@@ -37,6 +37,7 @@
 
     <modules>
         <module>kafka-course-unit-1</module>
+        <module>kafka-course-unit-2</module>
     </modules>
 
     <dependencyManagement>
