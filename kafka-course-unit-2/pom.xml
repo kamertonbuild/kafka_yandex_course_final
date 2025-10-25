@@ -10,37 +10,24 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <name>Kafka Course - Unit1</name>
-
-    <artifactId>kafka-course-unit-1</artifactId>
+    <artifactId>kafka-course-unit-2</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-
-    <properties>
-        <!-- kafka -->
-        <kafka-schema-registry-client.version>8.0.0</kafka-schema-registry-client.version>
-
-        <!-- jackson -->
-        <jackson-databind.version>2.18.3</jackson-databind.version>
-    </properties>
 
     <dependencies>
         <!-- kafka -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <version>${kafka-client-version}</version>
         </dependency>
         <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>kafka-json-schema-serializer</artifactId>
-            <version>${kafka-schema-registry-client.version}</version>
         </dependency>
 
         <!-- jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson-databind.version}</version>
         </dependency>
 
         <!-- lombok -->
@@ -83,14 +70,14 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>kc-unit-1-${project.version}</finalName>
+                            <finalName>kc-unit-2-${project.version}</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>ru.yandex.course.kafka.result.unit.first.Main</mainClass>
+                                    <mainClass>ru.yandex.course.kafka.result.unit.second.Main</mainClass>
                                 </manifest>
                                 <manifestEntries>
                                     <Build-Version>${project.version}</Build-Version>

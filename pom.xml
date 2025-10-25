@@ -4,11 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.0</version>
+    </parent>
+
+    <packaging>pom</packaging>
+
+    <name>Kafka Course</name>
+
     <groupId>ru.yandex.course.kafka</groupId>
     <artifactId>kafka-course-final</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-
-    <packaging>pom</packaging>
 
     <properties>
         <!-- java -->
@@ -16,48 +24,47 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- plugin -->
-        <maven.plugin.version>3.14.1</maven.plugin.version>
-        <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
-
         <!-- kafka -->
         <kafka-client-version>4.1.0</kafka-client-version>
-        <kafka-schema-registry-client.version>8.0.0</kafka-schema-registry-client.version>
 
-        <!-- jackson -->
-        <jackson-databind.version>2.18.3</jackson-databind.version>
+        <!-- spring -->
+        <spring-boot-configuration-processor.version>3.0.0
+        </spring-boot-configuration-processor.version>
+
+        <!-- plugin -->
+        <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
+
+        <!-- mapstruct -->
+        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
 
         <!-- lombok -->
         <lombok.version>1.18.28</lombok.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
         <!-- log -->
-        <slf4j.version>2.23.1</slf4j.version>
         <logback.version>1.2.6</logback.version>
+
+        <!-- common -->
+        <commons-collections4.version>4.4</commons-collections4.version>
     </properties>
 
     <modules>
         <module>kafka-course-unit-1</module>
+        <module>kafka-course-unit-2</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
-            <!-- kafka -->
+            <!-- mapstruct -->
             <dependency>
-                <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka-clients</artifactId>
-                <version>${kafka-client-version}</version>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.confluent</groupId>
-                <artifactId>kafka-json-schema-serializer</artifactId>
-                <version>${kafka-schema-registry-client.version}</version>
-            </dependency>
-
-            <!-- jackson -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson-databind.version}</version>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${org.mapstruct.version}</version>
             </dependency>
 
             <!-- lombok -->
@@ -68,26 +75,17 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- log -->
+            <!-- common -->
             <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
-                <version>${slf4j.version}</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
             </dependency>
+
             <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-slf4j2-impl</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>${kafka-client-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -98,17 +96,48 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven.plugin.version}</version>
                     <configuration>
-                        <source>${maven.compiler.target}</source>
-                        <target>${maven.compiler.target}</target>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
                         <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${org.mapstruct.version}</version>
+                            </path>
                             <path>
                                 <groupId>org.projectlombok</groupId>
                                 <artifactId>lombok</artifactId>
                                 <version>${lombok.version}</version>
                             </path>
+                            <dependency>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+                                <version>${lombok-mapstruct-binding.version}</version>
+                            </dependency>
+                            <path>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-configuration-processor</artifactId>
+                                <version>${spring-boot-configuration-processor.version}</version>
+                            </path>
                         </annotationProcessorPaths>
+                        <compilerArgs>
+                            <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
+                            <compilerArg>-Amapstruct.unmappedSourcePolicy=ERROR</compilerArg>
+                            <compilerArg>-Amapstruct.unmappedTargetPolicy=ERROR</compilerArg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <excludes>
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </exclude>
+                        </excludes>
                     </configuration>
                 </plugin>
             </plugins>
